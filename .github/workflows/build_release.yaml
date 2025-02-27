@@ -15,7 +15,7 @@ jobs:
               with:
                   name: win-x64 # .zip from build_windows
                   repository: element-hq/element-desktop
-                  run-id: 3388
+                  run-id: 13567591786
 
             - name: Get app version
               run: |
