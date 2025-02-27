@@ -11,11 +11,14 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - uses: actions/download-artifact@v4
-              with:
-                  name: win-x64 # .zip from build_windows
-                  repository: element-hq/element-desktop
-                  run-id: 13567591786
+            # - uses: actions/download-artifact@v4
+            #   with:
+            #       name: win-x64 # .zip from build_windows
+
+            # download file from https://github.com/hazzuk/elecord-desktop/releases/download/test/win-x64.zip
+            - name: Download win-x64.zip
+              run: |
+                  curl -L https://github.com/hazzuk/elecord-desktop/releases/download/test/win-x64.zip -o win-x64.zip
 
             - name: Get app version
               run: |
@@ -34,8 +37,8 @@ jobs:
                   draft: false
                   prerelease: false
                   files: |
-                      ./artifacts/extracted/squirrel-windows/Element Setup ${{ env.VERSION }}.exe
-                      ./artifacts/extracted/squirrel-windows/Element-desktop-${{ env.VERSION }}-full.nupkg
+                      ./artifacts/extracted/squirrel-windows/elecord Setup ${{ env.VERSION }}.exe
+                      ./artifacts/extracted/squirrel-windows/elecord-desktop-${{ env.VERSION }}-full.nupkg
                       ./artifacts/extracted/squirrel-windows/RELEASES
                   body: "[See the full elecord changelog](https://github.com/elecordapp/elecord-web/releases/tag/v${{ env.VERSION }})"
               # env:
