@@ -1,0 +1,58 @@
+# This action updates the packages.elecord.app site.
+# It adds new redirects and replaces relevant files.
+
+on:
+    workflow_call: {}
+env:
+    DOWNLOAD_URL: "https://github.com/hazzuk/elecord-desktop/releases/download/v${{ env.VERSION }}"
+    WIN_UPDATE_PATH: "/desktop/update/win32/x64"
+    WIN_INSTALL_PATH: "/desktop/install/win32/x64"
+jobs:
+    packages:
+        name: Update packages.elecord.app
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Get app version
+              run: |
+                  version=$(jq -r '.version' package.json)
+                  echo "VERSION: $version"
+                  echo "VERSION=$version" >> $GITHUB_ENV
+
+            - name: Create artifacts directory
+              run: |
+                  mkdir -p ./artifacts
+
+            - name: Download RELEASES file
+              run: |
+                  curl -L "${{ env.DOWNLOAD_URL }}/RELEASES" -o ./artifacts/RELEASES.txt
+
+            - name: Replace RELEASES file
+              run: |
+                  cp -f ./artifacts/RELEASES.txt ./root${{ env.WIN_UPDATE_PATH }}/RELEASES.txt
+
+            - name: Modify versionless redirect
+              # update the 'version agnostic' redirect to the latest version
+              run: |
+                  sed -i \
+                  "/\/desktop\/install\/win32\/x64\/elecord%20Setup\.exe/ c\
+                  ${{ env.WIN_INSTALL_PATH }}/elecord%20Setup ${{ env.DOWNLOAD_URL }}/elecord.Setup.${{ env.VERSION }}.exe" \
+                  ./root/_redirects
+
+            - name: Add installer redirect
+              run: |
+                  echo "${{ env.WIN_INSTALL_PATH }}/elecord%20Setup%20${{ env.VERSION }}.exe \
+                  ${{ env.DOWNLOAD_URL }}/elecord.Setup.${{ env.VERSION }}.exe" >> ./root/_redirects
+
+            - name: Add update redirect
+              run: |
+                  echo "${{ env.WIN_UPDATE_PATH }}/elecord-desktop-${{ env.VERSION }}-full.nupkg \
+                  ${{ env.DOWNLOAD_URL }}/elecord-desktop-${{ env.VERSION }}-full.nupkg" >> ./root/_redirects
+
+            # upload artifacts
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: redirects
+                  path: ./root
