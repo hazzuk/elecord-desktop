@@ -6,7 +6,8 @@ on:
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
-permissions: {} # No permissions required
+permissions:
+    contents: write
 jobs:
     # fetch:
     #     uses: ./.github/workflows/build_prepare.yaml
