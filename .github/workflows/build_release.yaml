@@ -26,6 +26,10 @@ jobs:
                   echo "VERSION: $version"
                   echo "VERSION=$version" >> $GITHUB_ENV
 
+            - name: Create artifacts directory
+              run: |
+                  mkdir -p ./artifacts
+
             - name: Extract files
               run: |
                   unzip -q win-x64.zip -d ./artifacts/win-x64
