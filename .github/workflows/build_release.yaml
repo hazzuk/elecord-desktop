@@ -16,19 +16,20 @@ jobs:
             #   with:
             #       name: win-x64 # .zip from build_windows
 
-            # download file from https://github.com/hazzuk/elecord-desktop/releases/download/test/win-x64.zip
             - name: Download win-x64.zip
               run: |
                   curl -L https://github.com/hazzuk/elecord-desktop/releases/download/test/win-x64.zip -o win-x64.zip
 
             - name: Get app version
               run: |
-                  echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
+                  version=$(jq -r '.version' package.json)
+                  echo "VERSION: $version"
+                  echo "VERSION=$version" >> $GITHUB_ENV
 
             - name: Extract files
               run: |
-                  unzip -q win-x64.zip -d ./artifacts
-                  ls -la ./artifacts/squirrel-windows
+                  unzip -q win-x64.zip -d ./artifacts/win-x64
+                  ls ./artifacts/win-x64/squirrel-windows
 
             - name: Create release
               uses: softprops/action-gh-release@v2
@@ -38,9 +39,9 @@ jobs:
                   draft: false
                   prerelease: false
                   files: |
-                      ./artifacts/extracted/squirrel-windows/elecord Setup ${{ env.VERSION }}.exe
-                      ./artifacts/extracted/squirrel-windows/elecord-desktop-${{ env.VERSION }}-full.nupkg
-                      ./artifacts/extracted/squirrel-windows/RELEASES
+                      ./artifacts/win-x64/squirrel-windows/elecord Setup ${{ env.VERSION }}.exe
+                      ./artifacts/win-x64/squirrel-windows/elecord-desktop-${{ env.VERSION }}-full.nupkg
+                      ./artifacts/win-x64/squirrel-windows/RELEASES
                   body: "[See the full elecord changelog](https://github.com/elecordapp/elecord-web/releases/tag/v${{ env.VERSION }})"
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
