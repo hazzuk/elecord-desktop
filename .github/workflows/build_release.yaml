@@ -41,5 +41,5 @@ jobs:
                       ./artifacts/extracted/squirrel-windows/elecord-desktop-${{ env.VERSION }}-full.nupkg
                       ./artifacts/extracted/squirrel-windows/RELEASES
                   body: "[See the full elecord changelog](https://github.com/elecordapp/elecord-web/releases/tag/v${{ env.VERSION }})"
-              # env:
-              #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
