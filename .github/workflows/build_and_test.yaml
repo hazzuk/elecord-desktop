@@ -8,24 +8,24 @@ concurrency:
     cancel-in-progress: true
 permissions: {} # No permissions required
 jobs:
-    fetch:
-        uses: ./.github/workflows/build_prepare.yaml
-        permissions:
-            contents: read
-        with:
-            config: ${{ github.event.pull_request.base.ref == 'develop' && 'elecord.app/nightly' || 'elecord.app/release' }}
-            version: ${{ github.event.pull_request.base.ref == 'develop' && 'develop' || '' }}
+    # fetch:
+    #     uses: ./.github/workflows/build_prepare.yaml
+    #     permissions:
+    #         contents: read
+    #     with:
+    #         config: ${{ github.event.pull_request.base.ref == 'develop' && 'elecord.app/nightly' || 'elecord.app/release' }}
+    #         version: ${{ github.event.pull_request.base.ref == 'develop' && 'develop' || '' }}
 
-    windows:
-        needs: fetch
-        name: Windows
-        uses: ./.github/workflows/build_windows.yaml
-        strategy:
-            matrix:
-                # arch: [x64, ia32]
-                arch: [x64]
-        with:
-            arch: ${{ matrix.arch }}
+    # windows:
+    #     needs: fetch
+    #     name: Windows
+    #     uses: ./.github/workflows/build_windows.yaml
+    #     strategy:
+    #         matrix:
+    #             # arch: [x64, ia32]
+    #             arch: [x64]
+    #     with:
+    #         arch: ${{ matrix.arch }}
 
     # linux:
     #     needs: fetch
@@ -46,3 +46,7 @@ jobs:
     #     needs: fetch
     #     name: macOS
     #     uses: ./.github/workflows/build_macos.yaml
+
+    release:
+            name: Release
+            uses: ./.github/workflows/build_release.yaml
