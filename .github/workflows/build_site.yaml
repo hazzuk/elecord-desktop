@@ -4,6 +4,7 @@
 on:
     workflow_call: {}
 env:
+    VERSION: ""
     DOWNLOAD_URL: "https://github.com/hazzuk/elecord-desktop/releases/download/v${{ env.VERSION }}"
     WIN_UPDATE_PATH: "/desktop/update/win32/x64"
     WIN_INSTALL_PATH: "/desktop/install/win32/x64"
