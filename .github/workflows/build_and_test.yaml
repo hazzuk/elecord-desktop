@@ -47,9 +47,11 @@ jobs:
     #     uses: ./.github/workflows/build_macos.yaml
 
     release:
+            needs: [windows]
             name: Create GitHub release
             uses: ./.github/workflows/build_release.yaml
 
     packages:
+            needs: [release]
             name: Update packages.elecord.app
             uses: ./.github/workflows/build_site.yaml
