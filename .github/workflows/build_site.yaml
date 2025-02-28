@@ -37,13 +37,7 @@ jobs:
                   cp -f ./artifacts/RELEASES.txt ./root${{ env.WIN_UPDATE_PATH }}/RELEASES.txt
 
             - name: Modify versionless redirect
-              # point the versionless redirect at the latest version
-              # run: |
-              #     sed -i \
-              #     "/\/desktop\/install\/win32\/x64\/elecord%20Setup\.exe/ c\
-              #     ${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe ${{ env.FULL_DOWNLOAD_URL }}/elecord.Setup.${{ env.VERSION }}.exe" \
-              #     ./root/_redirects
-              # replace the first line with the new redirect
+                # replace the first line with the new redirect
                 run: |
                     sed -i "1s#.*#${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe \
                     ${{ env.FULL_DOWNLOAD_URL }}/elecord.Setup.${{ env.VERSION }}.exe#" \
