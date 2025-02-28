@@ -56,7 +56,7 @@ jobs:
                   title: "Update redirects for ${{ env.VERSION }}"
                   body: |
                       GitHub action update to packages.elecord.app redirects.
-                      - https://packages.elecord.app/${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe
-                      - https://packages.elecord.app/${{ env.WIN_INSTALL_PATH }}/elecord%20Setup%20${{ env.VERSION }}.exe
-                      - https://packages.elecord.app/${{ env.WIN_UPDATE_PATH }}/elecord-desktop-${{ env.VERSION }}-full.nupkg
-                      - https://packages.elecord.app/${{ env.WIN_UPDATE_PATH }}/RELEASES.txt
+                      - https://packages.elecord.app${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe
+                      - https://packages.elecord.app${{ env.WIN_INSTALL_PATH }}/elecord%20Setup%20${{ env.VERSION }}.exe
+                      - https://packages.elecord.app${{ env.WIN_UPDATE_PATH }}/elecord-desktop-${{ env.VERSION }}-full.nupkg
+                      - https://packages.elecord.app${{ env.WIN_UPDATE_PATH }}/RELEASES
