@@ -46,11 +46,10 @@ jobs:
     #     name: macOS
     #     uses: ./.github/workflows/build_macos.yaml
 
-    # release:
-    #         name: Release
-    #         uses: ./.github/workflows/build_release.yaml
+    release:
+            name: Create GitHub release
+            uses: ./.github/workflows/build_release.yaml
 
     packages:
             name: Update packages.elecord.app
             uses: ./.github/workflows/build_site.yaml
-

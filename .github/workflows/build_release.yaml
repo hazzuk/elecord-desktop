@@ -12,26 +12,19 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            # - uses: actions/download-artifact@v4
-            #   with:
-            #       name: win-x64 # .zip from build_windows
-
-            - name: Download win-x64.zip
-              run: |
-                  curl -L https://github.com/hazzuk/elecord-desktop/releases/download/test/win-x64.zip -o win-x64.zip
-
             - name: Get app version
               run: |
                   version=$(jq -r '.version' package.json)
                   echo "VERSION: $version"
                   echo "VERSION=$version" >> $GITHUB_ENV
 
-            - name: Create artifacts directory
+            - uses: actions/download-artifact@v4
+              with:
+                  name: win-x64 # .zip from build_windows
+
+            - name: Extract artifacts
               run: |
                   mkdir -p ./artifacts
-
-            - name: Extract files
-              run: |
                   unzip -q win-x64.zip -d ./artifacts/win-x64
                   ls ./artifacts/win-x64/squirrel-windows
 
@@ -47,5 +40,3 @@ jobs:
                       ./artifacts/win-x64/squirrel-windows/elecord-desktop-${{ env.VERSION }}-full.nupkg
                       ./artifacts/win-x64/squirrel-windows/RELEASES
                   body: "[See the full elecord changelog](https://github.com/elecordapp/elecord-web/releases/tag/v${{ env.VERSION }})"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

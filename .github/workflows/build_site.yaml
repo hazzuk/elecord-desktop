@@ -4,7 +4,7 @@
 on:
     workflow_call: {}
 env:
-    DOWNLOAD_URL: "https://github.com/hazzuk/elecord-desktop/releases/download/v"
+    DOWNLOAD_URL: "https://github.com/elecordapp/elecord-desktop/releases/download/v"
     WIN_UPDATE_PATH: "/desktop/update/win32/x64"
     WIN_INSTALL_PATH: "/desktop/install/win32/x64"
 permissions:
@@ -24,20 +24,15 @@ jobs:
                   echo "VERSION=$version" >> $GITHUB_ENV
                   echo "FULL_DOWNLOAD_URL=${{ env.DOWNLOAD_URL }}$version" >> $GITHUB_ENV
 
-            - name: Create artifacts directory
+            - name: Update RELEASES file
+              # download the RELEASES file from the latest github release
               run: |
                   mkdir -p ./artifacts
-
-            - name: Download RELEASES file
-              run: |
                   curl -L "${{ env.FULL_DOWNLOAD_URL }}/RELEASES" -o ./artifacts/RELEASES.txt
-
-            - name: Replace RELEASES file
-              run: |
                   cp -f ./artifacts/RELEASES.txt ./root${{ env.WIN_UPDATE_PATH }}/RELEASES.txt
 
             - name: Modify versionless redirect
-              # replace the first line with the new redirect
+              # replace the first line with the latest version redirect
               run: |
                   sed -i "1s#.*#${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe \
                   ${{ env.FULL_DOWNLOAD_URL }}/elecord.Setup.${{ env.VERSION }}.exe#" \
@@ -53,13 +48,6 @@ jobs:
                   echo "${{ env.WIN_UPDATE_PATH }}/elecord-desktop-${{ env.VERSION }}-full.nupkg \
                   ${{ env.FULL_DOWNLOAD_URL }}/elecord-desktop-${{ env.VERSION }}-full.nupkg" >> ./root/_redirects
 
-            # upload artifacts
-            # - name: Upload artifacts
-            #   uses: actions/upload-artifact@v4
-            #   with:
-            #       name: redirects
-            #       path: ./root
-
             - name: Create Pull Request
               uses: peter-evans/create-pull-request@v7
               with:
@@ -68,3 +56,7 @@ jobs:
                   title: "Update redirects for ${{ env.VERSION }}"
                   body: |
                       GitHub action update to packages.elecord.app redirects.
+                      - https://packages.elecord.app/${{ env.WIN_INSTALL_PATH }}/elecord%20Setup.exe
+                      - https://packages.elecord.app/${{ env.WIN_INSTALL_PATH }}/elecord%20Setup%20${{ env.VERSION }}.exe
+                      - https://packages.elecord.app/${{ env.WIN_UPDATE_PATH }}/elecord-desktop-${{ env.VERSION }}-full.nupkg
+                      - https://packages.elecord.app/${{ env.WIN_UPDATE_PATH }}/RELEASES.txt
